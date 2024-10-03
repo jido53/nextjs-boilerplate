@@ -8,7 +8,6 @@ export default function Formulario() {
   const [responseFiles, setResponseFiles] = useState([]); // Estado para guardar los archivos
   const [errorMessage, setErrorMessage] = useState(""); // Estado para guardar mensajes de error
   const [showNextButton, setShowNextButton] = useState(false); // Estado para controlar la visibilidad del botón "Siguiente"
-  const [fileStatuses, setFileStatuses] = useState([]); // Estado para guardar el estado de los archivos
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -39,29 +38,11 @@ export default function Formulario() {
     }
   };
 
-  const handleNext = async () => {
-    const statuses = await Promise.all(
-      responseFiles.map(async (file) => {
-        const statusUrl = `https://auto.mpdefensa.gob.ar/webhook-test/definir-embedding?id=${file.id}`;
-        const response = await fetch(statusUrl);
-        if (response.ok) {
-          const { has_embedding } = await response.json(); // Extraer "myField" del JSON
-          return {
-            id: file.id,
-            name: file.name,
-            status: has_embedding ? "Verdadero" : "Falso", // Si myField es true o false
-          };
-        } else {
-          return {
-            id: file.id,
-            name: file.name,
-            status: "Error", // Manejo de errores si la llamada falla
-          };
-        }
-      })
-    );
-
-    setFileStatuses(statuses); // Actualiza el estado con los resultados
+  const handleNext = () => {
+    // Aquí puedes definir la lógica para lo que sucede al hacer clic en "Siguiente"
+    // Por ejemplo, redirigir a otra página o mostrar un modal
+    console.log("Botón 'Siguiente' presionado. Redirigiendo a la siguiente página...");
+    // window.location.href = '/siguiente'; // Si deseas redirigir a otra página
   };
 
   return (
@@ -132,31 +113,6 @@ export default function Formulario() {
         >
           Siguiente
         </button>
-      )}
-
-      {/* Mostrar la tabla de estados de archivos */}
-      {fileStatuses.length > 0 && (
-        <div className="mt-6 p-4 bg-white border border-gray-300 rounded shadow-md">
-          <h2 className="text-xl font-semibold">Estados de Archivos:</h2>
-          <table className="min-w-full mt-4 border-collapse border border-gray-300">
-            <thead>
-              <tr>
-                <th className="border border-gray-300 p-2">Nombre del Archivo</th>
-                <th className="border border-gray-300 p-2">ID del Archivo</th>
-                <th className="border border-gray-300 p-2">Estado</th>
-              </tr>
-            </thead>
-            <tbody>
-              {fileStatuses.map((file) => (
-                <tr key={file.id}>
-                  <td className="border border-gray-300 p-2">{file.name}</td>
-                  <td className="border border-gray-300 p-2">{file.id}</td>
-                  <td className="border border-gray-300 p-2">{file.status}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
       )}
     </div>
   );
