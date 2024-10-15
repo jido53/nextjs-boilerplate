@@ -75,7 +75,7 @@ export default function Formulario() {
             value={text}
             onChange={(e) => setText(e.target.value)}
             className="border border-gray-300 p-2 rounded w-full"
-            placeholder="Introduce el texto aquí"
+            placeholder="Introduce el texto aquí!!!"
             required
           />
         </div>
